@@ -42,13 +42,13 @@ class DiscoverySensorConfig:
     
     def __post_init__(self, client_id:str,prefix:str=None):
         if self.device:
-            self.object_id = f"{slugify(self.device.name)}_{slugify(self.name)}"
+            self.object_id = f"{slugify(self.device.name)}-{slugify(self.name)}"
         else:
             self.object_id = slugify(self.name)
         self.state_topic = self.get_base_topic(client_id,prefix) + "/state"
         
          
-        self.unique_id = f"{client_id}_{slugify(self.name)}"
+        self.unique_id = f"{client_id}-{slugify(self.name)}"
 
     def get_base_topic(self,client_id:str=None,prefix:str=None):
         if prefix:

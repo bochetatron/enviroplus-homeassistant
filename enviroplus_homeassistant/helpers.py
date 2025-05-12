@@ -3,8 +3,8 @@ import unicodedata,re
 def slugify(s):
     slug = unicodedata.normalize('NFKD', s)
     slug = slug.encode('ascii', 'ignore').decode("ascii").lower()
-    slug = re.sub(r'[^a-z0-9-]+', '_', slug).strip('-')
-    slug = re.sub(r'[_]+', '_', slug)
+    slug = re.sub(r'[^a-z0-9-]+', '-', slug)
+    slug = re.sub(r'[-]+', '-', slug)
     return slug
 
 def del_none(d):

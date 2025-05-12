@@ -30,6 +30,8 @@ def parse_args():
     ap.add_argument("--retain-state", action="store_true", help="Set RETAIN flag on state messages.")
     ap.add_argument("--cpu-comp-factor", type=float, default=2.25, help="The factor to use for the CPU temp compensation. Decrease this number to adjust the temperature down, and increase to adjust up.")
     ap.add_argument("--help", action="help", help="print this help message and exit")
+    ap.add_argument("--use-tls", action=argparse.BooleanOptionalAction, help="Should the MQTT connection skip TLS")
+    ap.add_argument("--device-name", default="enviroplus", help="The device name to use") 
     return vars(ap.parse_args())
 
 
@@ -41,7 +43,8 @@ def main():
     discovery = HassDiscovery(
         use_pms5003=args["use_pms5003"],
         prefix=args["prefix"],
-        retain=args["retain_config"]
+        retain=args["retain_config"],
+        device_name=args["device_name"]
     )
 
     if args['print_sensors']:
@@ -58,7 +61,7 @@ def main():
         port=args["port"],
         username=args["username"],
         password=args["password"],
-        use_tls=True,
+        use_tls=args["use_tls"],
         on_connect=discovery.publish if not args['delete_sensors'] else discovery.publish_delete
     )
 

@@ -9,15 +9,16 @@ from .models import DiscoveryDeviceConfig, DiscoverySensorConfig
 from .helpers import slugify
 
 class HassDiscovery:
-    def __init__(self, client_id:str = None, prefix:str="homeassistant", use_pms5003:bool = True, retain: bool=True):
+    def __init__(self, client_id:str = None, prefix:str="homeassistant", use_pms5003:bool = True, retain: bool=True, device_name:str="enviroplus"):
         self.mac = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
         self.serialnum = self.getserial()
         self.use_pms5003 = use_pms5003
         self.prefix=prefix
         self.retain = retain
+        self.device_name = device_name
         
         self.device = DiscoveryDeviceConfig(
-            name="AirQuality",
+            name=self.device_name,
             model="Enviro+ on Raspbery Pi Zero W 2",
             manufacturer="Pimoroni & Raspberry Pi Foundation",
             sw_version=platform.platform(),
@@ -28,7 +29,7 @@ class HassDiscovery:
         if client_id:
             self.client_id = client_id
         else:
-            self.client_id = slugify(self.device.name)+"_"+self.serialnum.strip('0')
+            self.client_id = slugify(self.device.name)+"-"+self.serialnum.strip('0')
 
         self.sensors = {
             "humidity": DiscoverySensorConfig(
